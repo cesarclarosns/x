@@ -1,0 +1,16 @@
+export enum EColor {
+  "NONE" = "None",
+  "PINK" = "Pink",
+  "SILVER" = "Silver",
+  "GOLD" = "Gold",
+  "BLACK" = "Black",
+  "BROWN" = "Brown",
+  "RED" = "Red",
+  "ORANGE" = "Orange",
+  "YELLOW" = "Yellow",
+  "GREEN" = "Green",
+  "BLUE" = "Blue",
+  "VIOLET" = "Violet",
+  "GRAY" = "Gray",
+  "WHITE" = "White",
+}

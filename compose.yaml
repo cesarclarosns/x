@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  # x-client:
+  #   container_name: client
+  #   build:
+  #     context: client
+  #     dockerfile: Dockerfile.dev
+  #   volumes:
+  #     - ./client:/app
+  # x-server:
+  #   container_name: server
+  #   build:
+  #     context: server
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./server:/app
+  db:
+    container_name: db
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: x
+    ports:
+      - 27017:27017
+    volumes:
+      - db-data:/data/db
+      - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  redis:
+    container_name: redis
+    image: redis:7.2.1-alpine3.18
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+  
+volumes:
+  db-data:
+  redis-data:

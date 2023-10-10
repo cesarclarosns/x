@@ -1,0 +1,3 @@
+interface NotificationsState {
+  hasNewNotification: boolean;
+}
