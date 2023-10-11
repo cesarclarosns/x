@@ -9,7 +9,7 @@ import mongoose, {
 
 const messageSchema = new Schema(
   {
-    conversationId: {
+    chatId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },

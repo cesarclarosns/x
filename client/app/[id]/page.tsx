@@ -1,23 +1,16 @@
-"use client";
+import { notFound } from "next/navigation";
 
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
-
-export default function UserProfilePage({
+export default async function ProfilePage({
 	params,
 }: {
 	params: { id: string };
 }) {
-	console.log({ params });
-
-	const pathname = usePathname();
-	const searchParams = useSearchParams();
-	const router = useRouter();
-
-	console.log({ pathname, searchParams, router });
+	notFound();
 
 	return (
 		<div>
-			<h1 className="text-2xl">User profile</h1>
+			<p>Profile page</p>
+			<p>Username: {params?.id}</p>
 		</div>
 	);
 }

@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import useSocketInit from "@/hooks/use-socket-init";
 import { useAuthStore } from "@/stores/auth-store";
+import { useSocketStore } from "@/stores/socket-store";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,6 +20,11 @@ export default function RouteGuard({
 	const router = useRouter();
 	const { auth } = useAuthStore((state) => state);
 
+	/**
+	 * Init socket if user has signed in
+	 */
+	useSocketInit();
+
 	useEffect(() => {
 		const pathIsUnprotected = Boolean(
 			unprotectedPaths.find((path) => pathname.includes(path)),
@@ -25,6 +33,7 @@ export default function RouteGuard({
 		if (!isLoading && !auth && !pathIsUnprotected) {
 			router.push("/");
 		}
+
 		setIsLoading(false);
 	}, [pathname, auth, isLoading, router]);
 

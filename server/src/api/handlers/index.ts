@@ -1,8 +1,8 @@
 import { type Socket } from "socket.io";
-import { roomsHandler } from "./rooms.handler";
 import { usersHandler } from "./users.handler";
+import { chatsHandler } from "./chats.handler";
 
 export const initHandlers = (socket: Socket) => {
-  roomsHandler(socket);
+  chatsHandler(socket);
   usersHandler(socket);
 };
