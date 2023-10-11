@@ -1,6 +1,8 @@
+"use client";
+
 import { notFound } from "next/navigation";
 
-export default async function PostPage({
+export default function PostPage({
 	params,
 }: {
 	params: { id: string; username: string };
