@@ -2,7 +2,7 @@ import { IUser } from "@/shared/interfaces/models/user.interface";
 import { create } from "zustand";
 
 interface Auth {
-  user: IUser | undefined;
+  user: IUser;
   accessToken: string;
 }
 

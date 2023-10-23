@@ -1,12 +1,15 @@
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
+import { fileService } from "./api/file/file.service";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-// (async () => {
-//   const salt = bcrypt.genSaltSync();
-//   console.log({ salt });
-// })();
+import crypto from "crypto";
+import fs from "fs";
 
-let date = new Date(Date.now() + 2 * 60 * 1000);
-console.log(date.toUTCString());
+const files = ["30mb.jpg", "10mb.jpg", "10mb.jpg", "30mb.jpg", "30mb.jpg"];
 
-date = new Date("2023-10-09T07:14:44.025+00:00");
-console.log({ date: date.toLocaleString() });
+const getHash = (buffer: Buffer) => {
+  const hashSum = crypto.createHash("sha256");
+  hashSum.update(buffer);
+  const hex = hashSum.digest("hex");
+  return hex;
+};

@@ -1,6 +1,8 @@
 export interface ITokenPayloadUser {
-  _id: string;
+  id: string;
   username: string;
+  profilePicture?: string;
+  displayName?: string;
 }
 
 export interface ITokenPayload {

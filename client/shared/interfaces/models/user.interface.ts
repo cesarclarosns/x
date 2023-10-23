@@ -1,6 +1,7 @@
 export type IUser = {
-  _id: string;
+  id: string;
   username: string;
   email?: string;
-  profilePhotoUrl?: string;
+  profilePicture?: string;
+  displayName?: string;
 };

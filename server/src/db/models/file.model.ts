@@ -10,15 +10,16 @@ import mongoose, {
 
 const fileSchema = new Schema(
   {
-    fileType: {
+    type: {
       type: String,
       enum: ["image", "video", "file"],
       required: true,
     },
-    fileName: { type: String, required: true },
-    fileSize: { type: Number, required: true },
-    filePath: { type: String, required: true },
-    fileUrl: { type: String, required: true },
+    name: { type: String, required: true },
+    key: { type: String, required: true },
+    url: { type: String, required: true },
+    hash: { type: String, required: true },
+    size: { type: Number, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   {

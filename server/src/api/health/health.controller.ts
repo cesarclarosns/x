@@ -17,9 +17,19 @@ class HealthController {
 
   getSockets(): RequestHandler {
     return async (req, res) => {
-      const sockets = await io.fetchSockets();
-      const socketIds = sockets.map((socket) => socket.id);
-      res.send(socketIds);
+      try {
+        const sockets = await io.fetchSockets();
+        const data = sockets.map((socket) => {
+          console.log(socket.rooms);
+          return {
+            id: socket.id,
+            rooms: Array.from(socket.rooms),
+          };
+        });
+        res.send(data);
+      } catch (err) {
+        res.status(500).send(err?.toString());
+      }
     };
   }
 }

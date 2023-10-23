@@ -1,3 +1,4 @@
+import { IDocument } from "@/shared/interfaces";
 import mongoose, {
   Schema,
   model,
@@ -19,7 +20,10 @@ const chatSchema = new Schema(
   }
 );
 
-export type TChat = HydratedDocument<InferSchemaType<typeof chatSchema>>;
+export type TChat = InferSchemaType<typeof chatSchema> & IDocument;
+export type TChatHydrated = HydratedDocument<
+  InferSchemaType<typeof chatSchema>
+>;
 export type TChatFilterQuery = FilterQuery<TChat>;
 export type TChatQueryOptions = QueryOptions<TChat>;
 

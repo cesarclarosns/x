@@ -1,23 +1,29 @@
+import { IDocument } from "@/shared/interfaces";
 import {
   Schema,
   model,
   InferSchemaType,
-  HydratedDocument,
   ProjectionType,
   FilterQuery,
   QueryOptions,
-  Model,
+  HydratedDocumentFromSchema,
 } from "mongoose";
 
 const userSchema = new Schema(
   {
-    email: { type: String, unique: true },
+    email: { type: String, unique: true, sparse: true },
     password: { type: String },
-    username: { type: String, required: true, unique: true },
-    googleId: { type: String, unique: true },
+    username: { type: String, unique: true, sparse: true, required: true },
+    googleId: { type: String, unique: true, sparse: true },
     displayName: { type: String },
     profilePicture: { type: String },
-    emailVerified: { type: Boolean, default: false },
+    emailVerified: { type: Boolean, default: false, required: false },
+    status: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "offline",
+      required: false,
+    },
   },
   {
     timestamps: true,
@@ -25,9 +31,10 @@ const userSchema = new Schema(
   }
 );
 
-export type TUser = HydratedDocument<InferSchemaType<typeof userSchema>>;
-export type UserFilterQuery = FilterQuery<TUser>;
-export type UserProjectionType = ProjectionType<TUser>;
-export type UserQueryOptions = QueryOptions<TUser>;
+export type TUser = InferSchemaType<typeof userSchema> & IDocument;
+export type TUserHydrated = HydratedDocumentFromSchema<typeof userSchema>;
+export type TUserFilterQuery = FilterQuery<TUser>;
+export type TUserProjectionType = ProjectionType<TUser>;
+export type TUserQueryOptions = QueryOptions<TUser>;
 
 export const User = model("User", userSchema, "users");

@@ -2,14 +2,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { SubmitHandler, useForm, FieldErrors } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 import useApis from "@/hooks/use-apis";
-import { useAuthStore } from "@/stores/auth-store";
 import { Button } from "../ui/button";
 import {
 	Form,

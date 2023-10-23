@@ -10,6 +10,7 @@ const useSocketInit = () => {
   const { refresh } = useRefreshToken();
 
   useEffect(() => {
+    console.log("Socket has changed");
     if (socket) {
       socket.on("connect", () => {
         console.log("connect", { socket });
@@ -29,6 +30,7 @@ const useSocketInit = () => {
   }, [socket]);
 
   useEffect(() => {
+    console.log("Checking if user is signed in to connect socket");
     if (auth) {
       connect({ accessToken: auth.accessToken });
     }

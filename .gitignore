@@ -1,2 +1,5 @@
-**/node_modules
+eari*/node_modules
 **/**.env
+**/.react-email
+**/**.jpg
+**/dist

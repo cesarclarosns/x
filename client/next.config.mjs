@@ -4,6 +4,14 @@ import "./env.mjs";
 const nextConfig = {
   output: "standalone",
   reactStrictMode: false,
+
+  images: {
+    remotePatterns: [
+      {
+        hostname: "i.pinimg.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

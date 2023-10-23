@@ -17,6 +17,7 @@ export default function PersistAuth({
 	const [persist] = useState(cookies["persist"] || false);
 	const { auth } = useAuthStore((state) => state);
 	const { refresh } = useRefreshToken();
+	console.log({ auth });
 
 	useEffect(() => {
 		let isMounted = true;

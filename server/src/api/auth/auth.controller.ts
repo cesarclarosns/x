@@ -31,15 +31,23 @@ class AuthController {
     );
     this.router.get(
       "/google/callback",
-      passport.authenticate("google", { failureRedirect: "/", session: false }),
+      passport.authenticate("google", {
+        failureRedirect: "http://127.0.0.1:3000",
+        session: false,
+      }),
       async (req, res, next) => {
-        const user = req.user as ITokenPayloadUser;
-        const payload = await authService.generateTokenPayload(user._id);
-        const refreshToken = await authService.generateRefreshToken(payload);
+        try {
+          const user = req.user as ITokenPayloadUser;
+          const payload = await authService.generateTokenPayload(user.id);
+          const refreshToken = await authService.generateRefreshToken(payload);
 
-        res.cookie("persist", true);
-        res.cookie("refreshToken", refreshToken, { httpOnly: true });
-        res.redirect("http://127.0.0.1:3000");
+          res.cookie("persist", true);
+          res.cookie("refreshToken", refreshToken, { httpOnly: true });
+          res.redirect("http://127.0.0.1:3000");
+        } catch (err) {
+          console.log(err);
+          next(err);
+        }
       }
     );
   }
@@ -62,7 +70,7 @@ class AuthController {
           accessToken,
         });
       } catch (err) {
-        console.log(err?.toString());
+        console.log(err);
         res.status(401).send(err);
       }
     };
@@ -87,7 +95,9 @@ class AuthController {
         const refreshToken = req.cookies?.refreshToken;
         if (!refreshToken) throw "Unauthorized";
 
-        const _payload = jsonwebtoken.verify(
+        const {
+          user: { id: userId },
+        } = jsonwebtoken.verify(
           refreshToken,
           config.REFRESH_TOKEN_SECRET
         ) as ITokenPayload;
@@ -98,13 +108,13 @@ class AuthController {
           refreshToken: newRefreshToken,
         } = await authService.refreshToken({
           refreshToken,
-          userId: _payload.user._id,
+          userId,
         });
 
         // Refresh token rotation
         res.cookie("refreshToken", newRefreshToken, {
           httpOnly: true,
-          maxAge: 1 * 60 * 60 * 1000,
+          maxAge: config.REFRESH_TOKEN_EXPIRES_IN * 1000,
         });
 
         res.send({
@@ -133,7 +143,7 @@ class AuthController {
           refreshToken,
           config.ACCESS_TOKEN_SECRET
         ) as ITokenPayload;
-        const userId = payload.user._id;
+        const userId = payload.user.id;
         await authService.signOut({
           userId,
           refreshToken,

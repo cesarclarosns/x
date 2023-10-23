@@ -1,22 +1,42 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import LayoutContent from "@/components/layout-content";
+import LayoutContentContainer from "@/components/layout-content-container";
+import LayoutContentHeader from "@/components/layout-content-header";
+import Posts from "@/components/posts/posts";
+import { Icons } from "@/components/ui/icons";
 import { useAuthStore } from "@/stores/auth-store";
-import { useSocketStore } from "@/stores/socket-store";
+
+function Content() {
+	return (
+		<section className="py-5 flex flex-1 flex-col gap-5">
+			<Posts></Posts>
+		</section>
+	);
+}
 
 export default function Home() {
-	const { connect, disconnect } = useSocketStore((state) => state);
 	const { auth } = useAuthStore((state) => state);
 
 	return (
-		<>
-			<section className="flex flex-col gap-5">
-				<h1 className="font-bold text-2xl">Latest featured posts</h1>
-				<Button onClick={() => connect({ accessToken: auth?.accessToken! })}>
-					Connect socket
-				</Button>
-				<Button onClick={() => disconnect()}>Diconnect socket</Button>
-			</section>
-		</>
+		<div className="flex-1 flex flex-col">
+			<LayoutContentHeader>
+				<div className="flex justify-between">
+					<div>
+						{auth ? (
+							<h1 className="font-bold text-xl">HOME</h1>
+						) : (
+							<h1 className="font-bold text-2xl">LATEST FEATURED POSTS</h1>
+						)}
+					</div>
+					<div>
+						<Icons.moreVerticalIcon></Icons.moreVerticalIcon>
+					</div>
+				</div>
+			</LayoutContentHeader>
+			<LayoutContent>
+				<Content></Content>
+			</LayoutContent>
+		</div>
 	);
 }

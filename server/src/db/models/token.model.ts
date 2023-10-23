@@ -15,11 +15,11 @@ const tokenSchema = new Schema(
     type: {
       type: String,
       required: true,
-      enum: ["refresh_token", "csrf_token"],
+      enum: ["refresh_token", "reset_password", "verify_email"],
     },
     expireAt: {
       type: Schema.Types.Date,
-      expires: 0, // In seconds
+      expires: 0, // Expires after n seconds
     },
   },
   {

@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 import passport from "passport";
 import { Strategy as JWTStrategy } from "passport-jwt";
 import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
-import { config } from "../../config/config";
-import { User } from "../../db/models/user.model";
-import { authService } from "./auth.service";
+import { config } from "@/config/config";
+import { User } from "@/db/models/user.model";
+import { authService } from "@/api/auth/auth.service";
+import { usersService } from "../users/users.service";
 
 passport.use(
   new JWTStrategy(
@@ -28,10 +29,8 @@ passport.use(
       callbackURL: config.GOOGLE_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, cb) => {
-      // console.log({ profile, emails: profile.emails, photos: profile.photos });
-
       try {
-        let user = await User.findOne(
+        let user = await usersService.findOne(
           { googleId: profile.id },
           { password: 0 }
         );
@@ -39,25 +38,22 @@ passport.use(
           const _id = new mongoose.Types.ObjectId();
           const username = `u${_id.toString()}`;
           const googleId = profile.id;
-          const email = profile.emails?.[0].value;
           const profilePicture = profile.photos?.[0].value;
           const displayName = profile.displayName;
 
-          const createdUser = await User.create({
+          await User.create({
             _id,
             username,
             googleId,
             displayName,
             ...(profilePicture && { profilePicture }),
           });
-          user = await User.findOne({ _id: createdUser._id }, { password: 0 });
+          user = await User.findOne({ _id }, { password: 0 });
         }
-        const payload = await authService.generateTokenPayload(
-          user!._id.toString()
-        );
+        const payload = await authService.generateTokenPayload(user!.id);
         return cb(null, payload.user);
       } catch (err) {
-        console.log(err);
+        console.log("err:", err);
         return cb(err, null);
       }
     }

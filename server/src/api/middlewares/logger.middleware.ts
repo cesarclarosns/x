@@ -1,3 +1,3 @@
-import morgan from "morgan";
+import pino from "pino-http";
 
-export const logger = morgan("combined");
+export const logger = () => pino({ transport: { target: "pino-pretty" } });

@@ -1,40 +1,52 @@
-import { Socket } from "socket.io";
-import { chatsService } from "../chats/chats.service";
+import ICustomSocket from "@/shared/interfaces/CustomSocket";
+import { io } from "@/api";
 
-type TJoinChatPayload = {
-  chatId: string;
-};
-
-type TEventType = "send_message" | "read_message" | "user_typing";
-type TEventPayload = {
-  message: any;
-  user: any;
-};
-type TSendEventPayload = {
-  chatId: string;
-  eventType: TEventType;
-  eventPayload: TEventPayload;
-};
-
-function payloadEventTypeIsSendMessage() {}
-
-export const chatsHandler = (socket: Socket) => {
-  socket.on("chats:join_chat", (payload: TJoinChatPayload) => {
-    socket.join(`chats:chat:${payload.chatId}`);
+export const chatsHandler = (socket: ICustomSocket) => {
+  socket.on("chats/chat/join-chat", (ev, cb) => {
+    try {
+      socket.join(ev.chat.id!);
+      cb(null, { status: "success" });
+    } catch (err) {
+      console.log(err);
+      cb(err);
+    }
   });
 
-  socket.on("chats:send_event", async (payload: TSendEventPayload) => {
-    if (payload.eventType == "send_message") {
-      await chatsService.createMessage();
-      socket.broadcast.to("").emit(`chats:chat:${payload.chatId}`, payload);
+  socket.on("chats/chat/leave-chat", (ev, cb) => {
+    try {
+      socket.leave(ev.chat.id!);
+      cb(null, { status: "success" });
+    } catch (err) {
+      console.log(err);
+      cb(err);
     }
+  });
 
-    if (payload.eventType == "read_message") {
-      await chatsService.createLastReadMessagePerUser();
+  socket.on("chats/chat/new-message", (ev, cb) => {
+    try {
+      // Create message
+      // Send chats/chat/new-message event to sockets connected to the room "chatId", the event contains the message created
+      socket.to(ev.chat.id!).emit("chats/chat/new-message", ev);
+      // Send chats/new-message event to each participant in the chat (using the socketId room)
+      io.fetchSockets();
+      let socketIds: string[] = [];
+      socketIds.forEach((socketId) => {
+        socket.to(socketId).emit("chats/new-message", ev);
+      });
+      cb(null, { status: "success" });
+    } catch (err) {
+      console.log(err);
+      cb(err);
     }
+  });
 
-    if (payload.eventType == "user_typing") {
-      socket.broadcast.emit(`chats:chat:${payload.chatId}`, payload);
+  socket.on("chats/chat/user-typing", (ev, cb) => {
+    try {
+      socket.to(ev.chat.id!).emit("chats/chat/user-typing", ev);
+      cb(null, { status: "success" });
+    } catch (err) {
+      console.log(err);
+      cb(err);
     }
   });
 };

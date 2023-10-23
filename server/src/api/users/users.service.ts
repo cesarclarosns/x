@@ -1,9 +1,9 @@
 import {
   TUser,
   User,
-  UserFilterQuery,
-  UserProjectionType,
-  UserQueryOptions,
+  TUserFilterQuery,
+  TUserProjectionType,
+  TUserQueryOptions,
 } from "../../db/models/user.model";
 
 class UsersService {
@@ -12,25 +12,25 @@ class UsersService {
     return user;
   }
   async findOne(
-    filter: UserFilterQuery = {},
-    projection: UserProjectionType = {},
-    options: UserQueryOptions = {}
+    filter: TUserFilterQuery = {},
+    projection: TUserProjectionType = {},
+    options: TUserQueryOptions = {}
   ) {
     const user = await User.findOne(filter, projection, options);
     return user;
   }
   async findAll(
-    filter: UserFilterQuery = {},
-    projection: UserProjectionType = {},
-    options: UserQueryOptions = {}
+    filter: TUserFilterQuery = {},
+    projection: TUserProjectionType = {},
+    options: TUserQueryOptions = {}
   ) {
     const users = await User.find(filter, projection, options);
     return users;
   }
   async update(
-    filter: UserFilterQuery,
+    filter: TUserFilterQuery,
     update: Partial<TUser>,
-    options: UserQueryOptions = {}
+    options: TUserQueryOptions = {}
   ) {
     const user = await User.updateOne(filter, update, options);
   }

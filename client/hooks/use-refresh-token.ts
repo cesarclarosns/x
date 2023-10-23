@@ -2,15 +2,19 @@ import { useAuthStore } from "@/stores/auth-store";
 import useApis from "./use-apis";
 import { z } from "zod";
 
-const refreshDataSchema = z.object({
-  accessToken: z.string(),
-  payload: z.object({
-    user: z.object({
-      _id: z.string(),
-      username: z.string(),
+const refreshDataSchema = z
+  .object({
+    accessToken: z.string(),
+    payload: z.object({
+      user: z
+        .object({
+          id: z.string(),
+          username: z.string(),
+        })
+        .passthrough(),
     }),
-  }),
-});
+  })
+  .passthrough();
 
 const useRefreshToken = () => {
   const { privateApi } = useApis();

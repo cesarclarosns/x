@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
-import { config } from "../../config/config";
-import { Token } from "../../db/models/token.model";
-import { ITokenPayload } from "../../shared/interfaces/TokenPayload.interface";
-import { usersService } from "../users/users.service";
+import { config } from "@/config/config";
+import { Token } from "@/db/models/token.model";
+import { ITokenPayload } from "@/shared/interfaces/TokenPayload.interface";
+import { usersService } from "@/api/users/users.service";
+import { User } from "@/db/models/user.model";
 
 class AuthService {
   constructor() {}
@@ -25,7 +26,7 @@ class AuthService {
       throw response;
     }
 
-    const payload = await this.generateTokenPayload(user._id.toString());
+    const payload = await this.generateTokenPayload(user.id);
     const accessToken = this.generateAccessToken(payload);
     const refreshToken = this.generateRefreshToken(payload);
 
@@ -41,7 +42,6 @@ class AuthService {
     username: string;
     password: string;
   }) {
-    console.log({ credentials });
     const response = {
       errors: {
         email: { message: "" },
@@ -89,7 +89,7 @@ class AuthService {
     await Token.deleteOne({
       token: refreshToken,
       type: "refresh_token",
-      userId: new mongoose.Types.ObjectId(userId),
+      userId,
     });
   }
 
@@ -120,9 +120,9 @@ class AuthService {
         accessToken,
         refreshToken,
       };
+    } else {
+      throw "Unauthorized";
     }
-
-    throw "Unauthorized";
   }
 
   async generateTokenPayload(userId: string): Promise<ITokenPayload> {
@@ -134,10 +134,14 @@ class AuthService {
         password: 0,
       }
     );
+    if (!user) throw "User not found";
+
     const payload: ITokenPayload = {
       user: {
-        _id: user!._id.toString(),
+        id: user!.id,
         username: user!.username,
+        ...(user?.profilePicture && { profilePicture: user.profilePicture }),
+        ...(user?.displayName && { displayName: user.displayName }),
       },
     };
     return payload;
@@ -155,10 +159,8 @@ class AuthService {
       expiresIn: config.REFRESH_TOKEN_EXPIRES_IN,
     });
 
-    const userId = new mongoose.Types.ObjectId(payload.user._id);
-
     await Token.create({
-      userId,
+      userId: payload.user.id,
       token,
       type: "refresh_token",
       expireAt: Date.now() + config.REFRESH_TOKEN_EXPIRES_IN * 1000,

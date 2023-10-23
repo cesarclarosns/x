@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const unprotectedPaths = ["/auth"];
+const protectedPaths = ["/my/"];
 
 export default function RouteGuard({
 	children,
@@ -26,11 +26,11 @@ export default function RouteGuard({
 	useSocketInit();
 
 	useEffect(() => {
-		const pathIsUnprotected = Boolean(
-			unprotectedPaths.find((path) => pathname.includes(path)),
+		const pathIsProtected = Boolean(
+			protectedPaths.find((path) => pathname.includes(path)),
 		);
 
-		if (!isLoading && !auth && !pathIsUnprotected) {
+		if (!isLoading && !auth && pathIsProtected) {
 			router.push("/");
 		}
 

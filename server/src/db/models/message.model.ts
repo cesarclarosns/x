@@ -28,7 +28,10 @@ const messageSchema = new Schema(
   }
 );
 
-export type TMessage = HydratedDocument<InferSchemaType<typeof messageSchema>>;
+export type TMessage = InferSchemaType<typeof messageSchema>;
+export type TMessageHydrated = HydratedDocument<
+  InferSchemaType<typeof messageSchema>
+>;
 export type TMessageFilterQuery = FilterQuery<TMessage>;
 export type TMessageQueryOptions = QueryOptions<TMessage>;
 
