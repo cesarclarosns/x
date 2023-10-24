@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useSocketInit from "@/hooks/use-socket-init";
+import useInitSocket from "@/hooks/use-init-socket";
 import { useAuthStore } from "@/stores/auth-store";
 import { useSocketStore } from "@/stores/socket-store";
 import { usePathname } from "next/navigation";
@@ -23,7 +23,7 @@ export default function RouteGuard({
 	/**
 	 * Init socket if user has signed in
 	 */
-	useSocketInit();
+	useInitSocket();
 
 	useEffect(() => {
 		const pathIsProtected = Boolean(

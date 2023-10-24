@@ -4,9 +4,9 @@ import { useSocketStore } from "@/stores/socket-store";
 import { useEffect } from "react";
 import useRefreshToken from "./use-refresh-token";
 
-const useSocketInit = () => {
+const useInitSocket = () => {
   const { auth } = useAuthStore((state) => state);
-  const { socket, connect } = useSocketStore((state) => state);
+  const { socket, connect, $connect } = useSocketStore((state) => state);
   const { refresh } = useRefreshToken();
 
   useEffect(() => {
@@ -14,6 +14,7 @@ const useSocketInit = () => {
     if (socket) {
       socket.on("connect", () => {
         console.log("connect", { socket });
+        $connect.next();
       });
       socket.on("connect_error", async (err) => {
         try {
@@ -27,6 +28,13 @@ const useSocketInit = () => {
         }
       });
     }
+
+    return () => {
+      if (socket) {
+        socket.off("connect");
+        socket.off("connect_error");
+      }
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -37,4 +45,4 @@ const useSocketInit = () => {
   }, []);
 };
 
-export default useSocketInit;
+export default useInitSocket;

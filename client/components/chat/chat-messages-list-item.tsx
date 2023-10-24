@@ -1,4 +1,4 @@
-export default function ChatMessage() {
+export default function ChatMessagesListItem() {
 	return (
 		<>
 			<div className="flex">

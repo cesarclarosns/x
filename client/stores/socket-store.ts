@@ -1,15 +1,44 @@
 import { env } from "@/env.mjs";
 import { io, Socket } from "socket.io-client";
 import { create } from "zustand";
-import useRefreshToken from "@/hooks/use-refresh-token";
+import { Subject } from "rxjs";
+import IDefaultCallbackResponse from "@/shared/interfaces/models/default-callback-response.interface";
 
-interface SocketState {
-  socket: Socket | undefined;
-  connect: ({ accessToken }: { accessToken: string }) => void;
-  disconnect: () => void;
+interface IClientToServerEvents {
+  "chats/chat/join-chat": (
+    ev: { chatId: string },
+    cb: (err: any, res?: IDefaultCallbackResponse) => void
+  ) => void;
+
+  "chats/chat/leave-chat": (
+    ev: { chatId: string },
+    cb: (err: any, res?: IDefaultCallbackResponse) => void
+  ) => void;
+
+  "chats/chat/new-message": () => void;
+  "chats/chat/user-typing": () => void;
+  "users/get-status": () => void;
+  "users/update-status": (ev: any, cb: (err: any, res: any) => void) => void;
 }
 
-export const useSocketStore = create<SocketState>()((set, get) => ({
+interface IServerToClientEvents {
+  "chats/new-message": () => void;
+  "chats/chat/new-message": () => void;
+  "chats/chat/user-typing": () => void;
+}
+
+interface ICustomSocket
+  extends Socket<IServerToClientEvents, IClientToServerEvents> {}
+
+interface ISocketState {
+  socket: ICustomSocket | undefined;
+  connect: ({ accessToken }: { accessToken: string }) => void;
+  disconnect: () => void;
+  $connect: Subject<void>;
+  $disconnect: Subject<void>;
+}
+
+export const useSocketStore = create<ISocketState>()((set, get) => ({
   socket: undefined,
   connect: ({ accessToken }) => {
     const socket = io(env.NEXT_PUBLIC_API_DOMAIN, {
@@ -25,4 +54,6 @@ export const useSocketStore = create<SocketState>()((set, get) => ({
       set({ socket: undefined });
     }
   },
+  $connect: new Subject(),
+  $disconnect: new Subject(),
 }));
