@@ -1,6 +1,6 @@
 class ChatsService {
   async create() {}
-  async udpate() {}
+  async update() {}
   async findOne() {}
   async findAll() {}
 

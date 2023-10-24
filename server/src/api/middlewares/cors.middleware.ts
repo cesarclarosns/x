@@ -1,4 +1,4 @@
-import Cors from "cors";
+import cors from "cors";
 
 const allowedOrigins = [
   "http://client:3000",
@@ -8,8 +8,8 @@ const allowedOrigins = [
   "https://assessment-enroute.cesarclarosns.com",
 ];
 
-export const cors = () =>
-  Cors({
+export const corsMw = () =>
+  cors({
     origin: (origin, callback) => {
       if (allowedOrigins.indexOf(origin!) !== -1 || !origin) {
         callback(null, true);

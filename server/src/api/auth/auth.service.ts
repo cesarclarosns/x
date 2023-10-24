@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import { config } from "@/config/config";
 import { Token } from "@/db/models/token.model";
-import { ITokenPayload } from "@/shared/interfaces/TokenPayload.interface";
+import { ITokenPayload } from "@/shared/interfaces/token-payload.interface";
 import { usersService } from "@/api/users/users.service";
 import { User } from "@/db/models/user.model";
 
@@ -27,8 +27,8 @@ class AuthService {
     }
 
     const payload = await this.generateTokenPayload(user.id);
-    const accessToken = this.generateAccessToken(payload);
-    const refreshToken = this.generateRefreshToken(payload);
+    const accessToken = await this.generateAccessToken(payload);
+    const refreshToken = await this.generateRefreshToken(payload);
 
     return {
       accessToken,

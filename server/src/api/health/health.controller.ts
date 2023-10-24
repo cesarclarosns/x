@@ -20,7 +20,6 @@ class HealthController {
       try {
         const sockets = await io.fetchSockets();
         const data = sockets.map((socket) => {
-          console.log(socket.rooms);
           return {
             id: socket.id,
             rooms: Array.from(socket.rooms),

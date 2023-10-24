@@ -9,17 +9,11 @@ export default interface IServerToClientEvents {
   }) => void;
 
   "chats/chat/new-message": (ev: {
-    chat: Partial<TChat>;
+    chatId: string;
     message: Partial<TMessage>;
   }) => void;
 
-  "chats/chat/user-typing": (ev: {
-    chat: Partial<TChat>;
-    userId: string;
-  }) => void;
+  "chats/chat/user-typing": (ev: { chatId: string; userId: string }) => void;
 
-  // "users/get-status": () => void;
-  // noArg: () => void;
-  // basicEmit: (a: number, b: string, c: Buffer) => void;
-  // withAck: (d: string, callback: (e: number) => void) => void;
+  "chats/chat/read-message": (ev: { chatId: string; userId: string }) => void;
 }

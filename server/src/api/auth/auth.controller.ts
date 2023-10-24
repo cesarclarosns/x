@@ -6,7 +6,7 @@ import passport from "passport";
 import {
   ITokenPayload,
   ITokenPayloadUser,
-} from "../../shared/interfaces/TokenPayload.interface";
+} from "../../shared/interfaces/token-payload.interface";
 
 class AuthController {
   router = Router();

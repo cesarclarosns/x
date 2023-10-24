@@ -28,3 +28,6 @@ export type TChatFilterQuery = FilterQuery<TChat>;
 export type TChatQueryOptions = QueryOptions<TChat>;
 
 export const Chat = model("Chat", chatSchema, "chats");
+
+// const chat = {} as TChat;
+// chat.participants.map((id) => id.)

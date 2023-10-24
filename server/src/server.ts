@@ -7,7 +7,7 @@ import { config } from "@/config/config";
 
 (async () => {
   await connectDB();
-  // await connectRedis();
+  await connectRedis();
   httpServer.listen(config.PORT, () => {
     console.log(`Server is running on port: ${config.PORT}`);
   });

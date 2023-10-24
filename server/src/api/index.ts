@@ -4,25 +4,27 @@ import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import helmet from "helmet";
 import passport from "passport";
-import { cors } from "@/api/middlewares/cors.middleware";
+import { createAdapter } from "@socket.io/redis-adapter";
 
 import "@/api/auth/auth.strategies";
 import { apiRouter } from "@/api/router";
 import { initHandlers } from "@/api/handlers";
-import { logger } from "@/api/middlewares/logger.middleware";
-import { socketAuth } from "@/api/middlewares/socket-auth.middlewar";
+import { corsMw } from "@/api/middlewares/cors.middleware";
+import { loggerMw } from "@/api/middlewares/logger.middleware";
+import { socketAuthMw } from "@/api/middlewares/socket-auth.middlewar";
 import {
   IClientToServerEvents,
   IInterServerEvents,
   IServerToClientEvents,
   ISocketData,
 } from "@/shared/interfaces";
+import { redisClient } from "@/cache";
 
 export const app = express();
 
+app.use(corsMw());
+app.use(loggerMw());
 app.use(helmet());
-app.use(logger());
-app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
@@ -32,6 +34,8 @@ app.use(passport.initialize({}));
 app.use("/api", apiRouter);
 
 export const httpServer = createServer(app);
+const pubClient = redisClient;
+const subClient = pubClient.duplicate();
 export const io = new Server<
   IClientToServerEvents,
   IServerToClientEvents,
@@ -43,9 +47,10 @@ export const io = new Server<
     origin: "*",
   },
 });
+io.adapter(createAdapter(pubClient, subClient));
 
-io.use(socketAuth());
+io.use(socketAuthMw());
 io.on("connection", (socket) => {
-  console.log("connection:", { sockets: io.sockets, rooms: socket.rooms });
+  console.log("connection");
   initHandlers(socket);
 });

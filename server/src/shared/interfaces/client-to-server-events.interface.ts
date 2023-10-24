@@ -12,18 +12,18 @@ export default interface IClientToServerEvents {
   ) => void;
 
   "chats/chat/join-chat": (
-    ev: { chat: Partial<TChat> },
+    ev: { chatId: string },
     cb: (err: any, res?: IDefaultCallbackResponse) => void
   ) => void;
 
   "chats/chat/leave-chat": (
-    ev: { chat: Partial<TChat> },
+    ev: { chatId: string },
     cb: (err: any, res?: IDefaultCallbackResponse) => void
   ) => void;
 
   "chats/chat/new-message": (
     ev: {
-      chat: Partial<TChat>;
+      chatId: string;
       message: Partial<TMessage>;
     },
     cb: (err: any, res?: IDefaultCallbackResponse) => void
@@ -31,7 +31,16 @@ export default interface IClientToServerEvents {
 
   "chats/chat/user-typing": (
     ev: {
-      chat: Partial<TChat>;
+      chatId: string;
+      userId: string;
+    },
+    cb: (err: any, response?: IDefaultCallbackResponse) => void
+  ) => void;
+
+  "chats/chat/read-message": (
+    ev: {
+      messageId: string;
+      chatId: string;
       userId: string;
     },
     cb: (err: any, response?: IDefaultCallbackResponse) => void
@@ -41,8 +50,8 @@ export default interface IClientToServerEvents {
     ev: { userIds: string[] },
     cb: (
       err: any,
-      response?: IDefaultCallbackResponse & {
-        payload: { online: string[]; offline: string[] };
+      response?: Omit<IDefaultCallbackResponse, "payload"> & {
+        payload: { online: string[]; offline: string[]; away: string[] };
       }
     ) => void
   ) => void;

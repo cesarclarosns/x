@@ -1,17 +1,22 @@
 import { RequestHandler, Router } from "express";
-import {
-  metadataSchema,
-  uploadImage,
-  uploadVideo,
-} from "../middlewares/upload.middleware";
+import { metadataSchema } from "../middlewares/upload.middleware";
+import { uploadImageMw, uploadVideoMw } from "@/api/middlewares";
 import { fileService } from "./file.service";
 
 class FileController {
   router = Router();
 
   constructor() {
-    this.router.post("/image", uploadImage.single("file"), this.createImage());
-    this.router.post("/video", uploadVideo.single("file"), this.createVideo());
+    this.router.post(
+      "/image",
+      uploadImageMw.single("file"),
+      this.createImage()
+    );
+    this.router.post(
+      "/video",
+      uploadVideoMw.single("file"),
+      this.createVideo()
+    );
   }
 
   createImage(): RequestHandler {

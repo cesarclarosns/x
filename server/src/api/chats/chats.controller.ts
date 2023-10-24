@@ -4,12 +4,16 @@ class ChatsController {
   router = Router();
   constructor() {
     this.router.get("/", this.findAll());
-    this.router.get("/:id", this.findOne());
     this.router.post("/", this.create());
+    this.router.get("/:id", this.findOne());
     this.router.put("/:id", this.update());
 
     this.router.post("/messages", this.createMessage());
     this.router.get("/messages/:id", this.findAllMessages());
+    this.router.put(
+      "/last-read-message-per-user",
+      this.createLastReadMessagePerUser()
+    );
   }
 
   create(): RequestHandler {
@@ -35,6 +39,10 @@ class ChatsController {
   createMessage(): RequestHandler {
     return (req, res) => {};
   }
+
+  createLastReadMessagePerUser(): RequestHandler {
+    return async (req, res) => {};
+  }
 }
 
-const chatsController = new ChatsController();
+export const chatsController = new ChatsController();

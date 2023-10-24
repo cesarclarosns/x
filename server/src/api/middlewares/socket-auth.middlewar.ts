@@ -2,10 +2,11 @@ import { Socket } from "socket.io";
 import { ExtendedError } from "socket.io/dist/namespace";
 import jsonwebtoken, { JsonWebTokenError } from "jsonwebtoken";
 import { config } from "../../config/config";
-import { ITokenPayload } from "../../shared/interfaces/TokenPayload.interface";
+import { ITokenPayload } from "../../shared/interfaces/token-payload.interface";
+import ICustomSocket from "@/shared/interfaces/custom-socket";
 
-export const socketAuth =
-  () => (socket: Socket, next: (err?: ExtendedError) => void) => {
+export const socketAuthMw =
+  () => (socket: ICustomSocket, next: (err?: ExtendedError) => void) => {
     try {
       const auth = socket.handshake.auth;
 

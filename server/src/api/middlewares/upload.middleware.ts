@@ -10,7 +10,7 @@ export const metadataSchema = z.object({
   "watermark-text": z.string(),
 });
 
-export const uploadImage = multer({
+export const uploadImageMw = multer({
   storage: multerS3({
     s3: fileService.client,
     bucket: "cesarclarosns-test",
@@ -36,7 +36,7 @@ export const uploadImage = multer({
   }),
 });
 
-export const uploadVideo = multer({
+export const uploadVideoMw = multer({
   storage: multerS3({
     s3: fileService.client,
     bucket: "cesarclarosns-test",

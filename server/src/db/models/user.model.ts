@@ -20,8 +20,8 @@ const userSchema = new Schema(
     emailVerified: { type: Boolean, default: false, required: false },
     status: {
       type: String,
-      enum: ["online", "offline"],
-      default: "offline",
+      enum: ["online", "offline", "away"],
+      default: "online",
       required: false,
     },
   },
