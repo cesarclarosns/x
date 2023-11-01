@@ -1,3 +1,4 @@
+import { IDocument } from "@/shared/interfaces";
 import mongoose, {
   Schema,
   model,
@@ -5,6 +6,7 @@ import mongoose, {
   HydratedDocument,
   FilterQuery,
   QueryOptions,
+  ProjectionType,
 } from "mongoose";
 
 const lastReadMessagePerUserSchema = new Schema(
@@ -28,11 +30,17 @@ const lastReadMessagePerUserSchema = new Schema(
   }
 );
 
-export type TLastReadMessagePerUser = HydratedDocument<
+export type TLastReadMessagePerUser = InferSchemaType<
+  typeof lastReadMessagePerUserSchema
+> &
+  IDocument;
+export type TLastReadMessagePerUserHydrated = HydratedDocument<
   InferSchemaType<typeof lastReadMessagePerUserSchema>
 >;
 export type TLastReadMessagePerUserFilterQuery =
   FilterQuery<TLastReadMessagePerUser>;
+export type TLastReadMessagePerUserProjectionType =
+  ProjectionType<TLastReadMessagePerUser>;
 export type TLastReadMessagePerUserQueryOptions =
   QueryOptions<TLastReadMessagePerUser>;
 

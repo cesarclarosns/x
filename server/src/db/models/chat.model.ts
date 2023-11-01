@@ -6,6 +6,7 @@ import mongoose, {
   HydratedDocument,
   FilterQuery,
   QueryOptions,
+  ProjectionType,
 } from "mongoose";
 
 const chatSchema = new Schema(
@@ -25,6 +26,7 @@ export type TChatHydrated = HydratedDocument<
   InferSchemaType<typeof chatSchema>
 >;
 export type TChatFilterQuery = FilterQuery<TChat>;
+export type TChatProjectionType = ProjectionType<TChat>;
 export type TChatQueryOptions = QueryOptions<TChat>;
 
 export const Chat = model("Chat", chatSchema, "chats");

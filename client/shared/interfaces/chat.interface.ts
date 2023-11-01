@@ -1,6 +1,6 @@
-import IUser from "./user.interface";
+import IUser from "./user.interface"
 
 export default interface IChat {
-  id: string;
-  participants: IUser[];
+  id: string
+  participants: IUser[]
 }

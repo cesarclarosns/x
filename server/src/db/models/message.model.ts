@@ -5,6 +5,7 @@ import mongoose, {
   HydratedDocument,
   FilterQuery,
   QueryOptions,
+  ProjectionType,
 } from "mongoose";
 
 const messageSchema = new Schema(
@@ -20,7 +21,13 @@ const messageSchema = new Schema(
     content: {
       type: String,
     },
-    attachments: [{ type: mongoose.Schema.Types.ObjectId, ref: "File" }],
+    attachments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
+    price: {
+      type: Number,
+    },
+    isPaid: {
+      type: Boolean,
+    },
   },
   {
     strict: false,
@@ -33,6 +40,7 @@ export type TMessageHydrated = HydratedDocument<
   InferSchemaType<typeof messageSchema>
 >;
 export type TMessageFilterQuery = FilterQuery<TMessage>;
+export type TMessageProjectionType = ProjectionType<TMessage>;
 export type TMessageQueryOptions = QueryOptions<TMessage>;
 
 export const Message = model("Message", messageSchema, "messages");

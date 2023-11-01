@@ -1,75 +1,73 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useSocketStore } from "@/stores/socket-store";
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
-import { Subscription } from "rxjs";
-import { z } from "zod";
+import { useEffect } from "react"
+import { useParams } from "next/navigation"
+import { useSocketStore } from "@/stores/socket-store"
+import { Subscription } from "rxjs"
+import { z } from "zod"
 
 const paramsSchema = z
   .object({
-    chatId: z.string(),
+    chatId: z.string()
   })
-  .passthrough();
+  .passthrough()
 
 const useInitChat = () => {
-  const params = useParams();
-  const { socket, $connect, $disconnect } = useSocketStore();
+  const params = useParams()
+  const { socket, $connect, $disconnect } = useSocketStore()
 
   const joinChat = (chatId: string) => {
-    if (!socket) return;
+    if (!socket) return
 
     socket.emit(
       "chats/chat/join-chat",
       {
-        chatId,
+        chatId
       },
       (err, res) => {
-        console.log({ err, res });
+        console.log({ err, res })
       }
-    );
-  };
+    )
+  }
 
   useEffect(() => {
-    let parsedParams = paramsSchema.safeParse(params);
+    if (!socket) return
+
+    let parsedParams = paramsSchema.safeParse(params)
     // console.log({ parsedParams, socket });
-    if (!parsedParams.success) return;
+    if (!parsedParams.success) return
 
-    let chatId = parsedParams.data.chatId;
+    let chatId = parsedParams.data.chatId
 
-    let subscription = new Subscription();
+    let subscription = new Subscription()
 
     subscription.add(
       $connect.subscribe(() => {
-        console.log("$connect ChatPage");
-        joinChat(chatId);
+        console.log("$connect ChatPage")
+        joinChat(chatId)
       })
-    );
+    )
     subscription.add(
       $disconnect.subscribe(() => {
-        console.log("$disconnect ChatPage");
+        console.log("$disconnect ChatPage")
       })
-    );
+    )
 
-    if (socket) {
-      joinChat(chatId);
-    }
+    joinChat(chatId)
 
     return () => {
-      console.log("Unsubscribing...");
+      console.log("Unsubscribing...")
       // Unsubscribe from subjects
-      subscription.unsubscribe();
+      subscription.unsubscribe()
 
       // Leave chat
-      if (socket) {
-        socket.emit("chats/chat/leave-chat", { chatId }, (err, res) => {
-          console.log({ err, res });
-        });
-        socket.off("chats/chat/new-message");
-      }
-    };
-  }, [socket, params]);
+      socket.emit("chats/chat/leave-chat", { chatId }, (err, res) => {
+        console.log({ err, res })
+      })
+      socket.off("chats/chat/new-message")
+    }
+  }, [socket, params])
 
-  return {};
-};
+  return {}
+}
 
-export default useInitChat;
+export default useInitChat

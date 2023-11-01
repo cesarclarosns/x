@@ -1,30 +1,31 @@
-import Providers from "@/components/providers";
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
-import Layout from "@/components/layout";
+import Providers from '@/components/providers'
 
-const inter = Inter({ subsets: ["latin"] });
+import './globals.css'
+
+import type { Metadata } from 'next'
+import { GeistSans } from 'geist/font'
+
+import { Toaster } from '@/components/ui/toaster'
+import Layout from '@/components/layout'
 
 export const metadata: Metadata = {
-	title: "X",
-	description: "X",
-};
+  title: 'X',
+  description: 'X'
+}
 
 export default function RootLayout({
-	children,
+  children
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode
 }) {
-	return (
-		<html lang="en">
-			<body className={inter.className}>
-				<Providers>
-					<Layout>{children}</Layout>
-				</Providers>
-				<Toaster></Toaster>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body className={GeistSans.className}>
+        <Providers>
+          <Layout>{children}</Layout>
+        </Providers>
+        <Toaster></Toaster>
+      </body>
+    </html>
+  )
 }

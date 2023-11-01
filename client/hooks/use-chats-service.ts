@@ -1,17 +1,33 @@
-import useApis from "./use-apis";
+import IChat from "@/shared/interfaces/chat.interface"
+import IMessage from "@/shared/interfaces/message.interface"
+
+import useApis from "./use-apis"
 
 interface IFindAllChatsQuery {
-  limit: number;
+  limit: number
+  skip: number
 }
 
 const useChatsService = () => {
-  const { api, privateApi } = useApis();
+  const { api, privateApi } = useApis()
 
-  const findOneChat = async () => {};
-  const findAllChats = async (query: any) => {};
-  const findAllMessages = async () => {};
+  const createChat = async (): Promise<IChat> => {
+    return { id: "", participants: [] }
+  }
 
-  return { findOneChat, findAllChats, findAllMessages };
-};
+  const findOneChat = async (): Promise<IChat> => {
+    return { id: "", participants: [] }
+  }
 
-export default useChatsService;
+  const findAllChats = async (query: any): Promise<IChat[]> => {
+    return []
+  }
+
+  const findAllMessages = async (): Promise<IMessage[]> => {
+    return []
+  }
+
+  return { findOneChat, findAllChats, findAllMessages }
+}
+
+export default useChatsService

@@ -1,6 +1,7 @@
-import { useAuthStore } from "@/stores/auth-store";
-import useApis from "./use-apis";
-import { z } from "zod";
+import { useAuthStore } from '@/stores/auth-store'
+import { z } from 'zod'
+
+import useApis from './use-apis'
 
 const refreshDataSchema = z
   .object({
@@ -8,28 +9,28 @@ const refreshDataSchema = z
     payload: z.object({
       user: z
         .object({
-          id: z.string(),
-          username: z.string(),
+          _id: z.string(),
+          username: z.string()
         })
-        .passthrough(),
-    }),
+        .passthrough()
+    })
   })
-  .passthrough();
+  .passthrough()
 
 const useRefreshToken = () => {
-  const { privateApi } = useApis();
-  const { setAuth, auth } = useAuthStore();
+  const { privateApi } = useApis()
+  const { setAuth, auth } = useAuthStore()
 
   const refresh = async () => {
-    const response = await privateApi.post("/auth/refresh", {});
-    const data = refreshDataSchema.parse(response.data);
-    setAuth({ user: data.payload.user, accessToken: data.accessToken });
-    return data.accessToken;
-  };
+    const response = await privateApi.post('/auth/refresh', {})
+    const data = refreshDataSchema.parse(response.data)
+    setAuth({ user: data.payload.user, accessToken: data.accessToken })
+    return data.accessToken
+  }
 
   return {
-    refresh,
-  };
-};
+    refresh
+  }
+}
 
-export default useRefreshToken;
+export default useRefreshToken

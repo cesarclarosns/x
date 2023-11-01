@@ -1,6 +1,6 @@
 import multer from "multer";
 import multerS3 from "multer-s3";
-import { fileService } from "../file/file.service";
+import { contentService } from "../features/content/contents.service";
 import { v4 } from "uuid";
 import { z } from "zod";
 import { Request } from "express";
@@ -12,7 +12,7 @@ export const metadataSchema = z.object({
 
 export const uploadImageMw = multer({
   storage: multerS3({
-    s3: fileService.client,
+    s3: contentService.client,
     bucket: "cesarclarosns-test",
     key: (req, file, callback) => {
       try {
@@ -38,7 +38,7 @@ export const uploadImageMw = multer({
 
 export const uploadVideoMw = multer({
   storage: multerS3({
-    s3: fileService.client,
+    s3: contentService.client,
     bucket: "cesarclarosns-test",
     key: (req, file, callback) => {
       try {

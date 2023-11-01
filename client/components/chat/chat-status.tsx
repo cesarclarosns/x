@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 export default function ChatStatus() {
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(false)
 
   useEffect(() => {
-    console.log({ state });
+    console.log({ state })
     return () => {
-      console.log({ state });
-    };
-  }, []);
+      console.log({ state })
+    }
+  }, [])
 
-  return <>{state ? "Online" : "Offline"}</>;
+  return <>{state ? "Online" : "Offline"}</>
 }

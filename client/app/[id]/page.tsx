@@ -1,16 +1,33 @@
-import { notFound } from "next/navigation";
+'use client'
 
-export default async function ProfilePage({
-	params,
-}: {
-	params: { id: string };
-}) {
-	notFound();
+import { notFound } from 'next/navigation'
+import { useUsersService } from '@/hooks'
+import { useQuery } from 'react-query'
 
-	return (
-		<div>
-			<p>Profile page</p>
-			<p>Username: {params?.id}</p>
-		</div>
-	);
+import LayoutContent from '@/components/layout-content'
+import Loading from '@/components/loading'
+import Profile from '@/components/profile/profile'
+
+export default function ProfilePage({ params }: { params: { id: string } }) {
+  const username = params.id
+  if (!username) notFound()
+
+  const { getUserProfileByUsername } = useUsersService()
+  const queryResult = useQuery(
+    ['users', username],
+    () => getUserProfileByUsername(username),
+    {}
+  )
+
+  return (
+    <div className="flex-1 flex flex-col">
+      {queryResult.isLoading && (
+        <LayoutContent>
+          <Loading></Loading>
+        </LayoutContent>
+      )}
+      {queryResult.isSuccess && <Profile user={queryResult.data}></Profile>}
+      {queryResult.isError && notFound()}
+    </div>
+  )
 }

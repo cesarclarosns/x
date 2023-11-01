@@ -6,12 +6,10 @@ import helmet from "helmet";
 import passport from "passport";
 import { createAdapter } from "@socket.io/redis-adapter";
 
-import "@/api/auth/auth.strategies";
+import "@/api/features/auth/auth.strategies";
 import { apiRouter } from "@/api/router";
 import { initHandlers } from "@/api/handlers";
-import { corsMw } from "@/api/middlewares/cors.middleware";
-import { loggerMw } from "@/api/middlewares/logger.middleware";
-import { socketAuthMw } from "@/api/middlewares/socket-auth.middlewar";
+import { corsMw, loggerMw, socketAuthMw } from "@/api/middlewares";
 import {
   IClientToServerEvents,
   IInterServerEvents,
@@ -34,8 +32,8 @@ app.use(passport.initialize({}));
 app.use("/api", apiRouter);
 
 export const httpServer = createServer(app);
-const pubClient = redisClient;
-const subClient = pubClient.duplicate();
+// const pubClient = redisClient;
+// const subClient = pubClient.duplicate();
 export const io = new Server<
   IClientToServerEvents,
   IServerToClientEvents,
@@ -47,7 +45,7 @@ export const io = new Server<
     origin: "*",
   },
 });
-io.adapter(createAdapter(pubClient, subClient));
+// io.adapter(createAdapter(pubClient, subClient));
 
 io.use(socketAuthMw());
 io.on("connection", (socket) => {

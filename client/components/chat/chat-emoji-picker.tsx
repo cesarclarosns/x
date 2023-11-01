@@ -1,3 +1,3 @@
 export default function ChatEmojiPicker() {
-	return <></>;
+  return <></>
 }

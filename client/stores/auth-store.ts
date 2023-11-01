@@ -1,15 +1,15 @@
-import { IUser } from "@/shared/interfaces/models/user.interface";
-import { create } from "zustand";
+import { IUser } from "@/shared/interfaces"
+import { create } from "zustand"
 
 interface Auth {
-  user: IUser;
-  accessToken: string;
+  user: IUser
+  accessToken: string
 }
 
 interface AuthState {
-  auth: Auth | undefined;
-  setAuth: (auth: Auth) => void;
-  clearAuth: () => void;
+  auth: Auth | undefined
+  setAuth: (auth: Auth) => void
+  clearAuth: () => void
 }
 
 export const useAuthStore = create<AuthState>()((set) => ({
@@ -17,6 +17,6 @@ export const useAuthStore = create<AuthState>()((set) => ({
   setAuth: (auth) => set(() => ({ auth })),
   clearAuth: () =>
     set(() => ({
-      auth: undefined,
-    })),
-}));
+      auth: undefined
+    }))
+}))

@@ -1,3 +1,0 @@
-const getPost = async () => {
-  return [];
-};

@@ -1,12 +1,13 @@
 import { io } from "@/api";
 import { logger } from "@/libs/logger";
 import ICustomSocket from "@/shared/interfaces/custom-socket";
-import { usersService } from "../users/users.service";
+import { usersService } from "../features/users/users.service";
+import mongoose from "mongoose";
 
 const handleOnConnect = async (socket: ICustomSocket) => {
   logger.info(null, "handleOnConnect", socket.id);
   try {
-    let room = `users:${socket.data.user.id}`;
+    let room = `users:${socket.data.user._id}`;
     socket.join(room);
   } catch (err) {
     console.log(err);
@@ -30,24 +31,24 @@ export const usersHandler = (socket: ICustomSocket) => {
 
   socket.on("users/get-status", async (ev, cb) => {
     try {
+      logger.info(ev, "users/get-status");
       let online: string[] = [],
         offline: string[] = [],
         away: string[] = [];
 
       await Promise.all(
         ev.userIds.map(async (userId) => {
-          const sockets = await io.in(userId).fetchSockets();
-          if (sockets.length) {
-            // If the user is connected check if the user has a predifined status
-            let user = await usersService.findOne({ id: userId });
-            if (user?.status) {
-              if (user.status == "online") return online.push(userId);
-              if (user.status == "away") return away.push(userId);
-            } else {
-              return online.push(userId);
-            }
-          }
-          return offline.push(userId);
+          let room = `users:${userId}`;
+          const sockets = await io.in(room).fetchSockets();
+
+          if (!sockets.length) return offline.push(userId);
+
+          let user = await usersService.findOne({
+            _id: new mongoose.Types.ObjectId(userId),
+          });
+          if (!user) return online.push(userId);
+          if (user.status == "offline") return offline.push(userId);
+          return online.push(userId);
         })
       );
 

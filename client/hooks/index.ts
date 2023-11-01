@@ -1,8 +1,9 @@
-import useApis from "./use-apis";
-import useChatsService from "./use-chats-service";
-import useInitChat from "./use-init-chat";
-import useInitSocket from "./use-init-socket";
-import useRefreshToken from "./use-refresh-token";
+import useApis from '@/hooks/use-apis'
+import useChatsService from '@/hooks/use-chats-service'
+import useInitChat from '@/hooks/use-init-chat'
+import useInitSocket from '@/hooks/use-init-socket'
+import useRefreshToken from '@/hooks/use-refresh-token'
+import useUsersService from '@/hooks/use-users-service'
 
 export {
   useApis,
@@ -10,4 +11,5 @@ export {
   useInitChat,
   useInitSocket,
   useRefreshToken,
-};
+  useUsersService
+}

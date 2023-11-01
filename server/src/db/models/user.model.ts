@@ -17,13 +17,15 @@ const userSchema = new Schema(
     googleId: { type: String, unique: true, sparse: true },
     displayName: { type: String },
     profilePicture: { type: String },
+    coverPicture: { type: String },
     emailVerified: { type: Boolean, default: false, required: false },
     status: {
       type: String,
-      enum: ["online", "offline", "away"],
+      enum: ["online", "offline"],
       default: "online",
       required: false,
     },
+    bio: { type: String },
   },
   {
     timestamps: true,

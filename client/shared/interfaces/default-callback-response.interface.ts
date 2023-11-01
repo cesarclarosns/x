@@ -1,4 +1,4 @@
 export default interface IDefaultCallbackResponse {
-  status: "success" | "failed";
-  payload?: any;
+  status: "success" | "failed"
+  payload?: any
 }

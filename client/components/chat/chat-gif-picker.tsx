@@ -1,3 +1,3 @@
 export default function ChatGifPicker() {
-	return <></>;
+  return <></>
 }

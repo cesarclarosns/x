@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "test": "jest --watchAll --verbose --detectOpenHandles",
+    "test": "cross-env NODE_ENV=dev jest --watchAll --verbose --detectOpenHandles",
     "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
     "start": "node dist/server.js",
     "build": "npx tsc --build",

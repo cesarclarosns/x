@@ -1,6 +1,12 @@
 export default interface IUser {
-  id: string;
-  profilePicture: string;
-  displayName: string;
-  username: string;
+  _id: string
+  username: string
+  displayName?: string
+  profilePicture?: string
+  emailVerified?: true
+  status?: "online" | "offline" | "away"
+  bio?: string
+
+  imagesCount?: number
+  videosCount?: number
 }

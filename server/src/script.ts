@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { fileService } from "./api/file/file.service";
+import { fileService } from "./api/features/content/contents.service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import crypto from "crypto";
